@@ -1,69 +1,96 @@
 package mars_rover;
 
-public class Rover {
+import java.util.Objects;
 
-    private String direction;
+import static mars_rover.Command.*;
+import static mars_rover.Direction.*;
+import static mars_rover.Rotation.isRotateRightCommand;
+
+class Rover {
+
+    private Direction direction;
     private int y;
     private int x;
 
-    public Rover(int x, int y, String direction) {
+    Rover(int x, int y, Direction direction) {
         this.direction = direction;
         this.y = y;
         this.x = x;
     }
 
-    public void receive(String commandsSequence) {
-        for (int i = 0; i < commandsSequence.length(); ++i) {
-            String command = commandsSequence.substring(i, i + 1);
+    void receive(String commandsSequence) {
 
-            if (command.equals("l") || command.equals("r")) {
+        for (int currentCommandPositionInSequence = 0; currentCommandPositionInSequence < commandsSequence.length(); currentCommandPositionInSequence++) {
+            String command = currentCommand(commandsSequence, currentCommandPositionInSequence);
 
-                // Rotate Rover
-                if (direction.equals("N")) {
-                    if (command.equals("r")) {
-                        direction = "E";
-                    } else {
-                        direction = "W";
-                    }
-                } else if (direction.equals("S")) {
-                    if (command.equals("r")) {
-                        direction = "W";
-                    } else {
-                        direction = "E";
-                    }
-                } else if (direction.equals("W")) {
-                    if (command.equals("r")) {
-                        direction = "N";
-                    } else {
-                        direction = "S";
-                    }
-                } else {
-                    if (command.equals("r")) {
-                        direction = "S";
-                    } else {
-                        direction = "N";
-                    }
-                }
+            if (isRotationCommand(command)) {
+                rotate(command);
             } else {
-
-                // Displace Rover
-                int displacement1 = -1;
-
-                if (command.equals("f")) {
-                    displacement1 = 1;
-                }
-                int displacement = displacement1;
-
-                if (direction.equals("N")) {
-                    y += displacement;
-                } else if (direction.equals("S")) {
-                    y -= displacement;
-                } else if (direction.equals("W")) {
-                    x -= displacement;
-                } else {
-                    x += displacement;
-                }
+                move(command);
             }
+        }
+    }
+
+    private void move(String command) {
+        int displacement = isCommandMoveForward(command) ? 1 : -1;
+
+        switch (direction) {
+            case N:
+                y += displacement;
+                break;
+            case S:
+                y -= displacement;
+                break;
+            case W:
+                x -= displacement;
+                break;
+            case E:
+                x += displacement;
+                break;
+        }
+    }
+
+    private void rotate(String command) {
+        if (isFacingNorth(direction)) {
+            rotateWhileFacingNorth(command);
+        } else if (isFacingSouth(direction)) {
+            rotateWileFacingSouth(command);
+        } else if (isFacingWest(direction)) {
+            rotateWhileFacingWest(command);
+        } else {
+            rotateWhileFacingEast(command);
+        }
+    }
+
+    private void rotateWhileFacingEast(String command) {
+        if (isRotateRightCommand(command)) {
+            direction = faceSouth();
+        } else {
+            direction = faceNorth();
+        }
+    }
+
+    private void rotateWhileFacingWest(String command) {
+        if (isRotateRightCommand(command)) {
+            direction = faceNorth();
+        } else {
+            direction = faceSouth();
+        }
+    }
+
+    private void rotateWileFacingSouth(String command) {
+        if (isRotateRightCommand(command)) {
+            direction = faceWest();
+        } else {
+            direction = faceEast();
+        }
+    }
+
+    private void rotateWhileFacingNorth(String command) {
+        if (isRotateRightCommand(command)) {
+            direction = faceEast();
+        } else {
+            direction = faceWest();
         }
     }
 
@@ -76,24 +103,7 @@ public class Rover {
 
         if (y != rover.y) return false;
         if (x != rover.x) return false;
-        return direction != null ? direction.equals(rover.direction) : rover.direction == null;
+        return Objects.equals(direction, rover.direction);
 
-    }
-
-    @Override
-    public int hashCode() {
-        int result = direction != null ? direction.hashCode() : 0;
-        result = 31 * result + y;
-        result = 31 * result + x;
-        return result;
-    }
-
-    @Override
-    public String toString() {
-        return "Rover{" +
-            "direction='" + direction + '\'' +
-            ", y=" + y +
-            ", x=" + x +
-            '}';
     }
 }

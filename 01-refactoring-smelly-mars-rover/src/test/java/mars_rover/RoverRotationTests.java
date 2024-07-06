@@ -7,73 +7,73 @@ import org.junit.jupiter.api.Test;
 public class RoverRotationTests {
     @Test
     public void facingNorthRotateLeft() {
-        Rover rover = new Rover(0, 0, "N");
+        Rover rover = new Rover(0, 0, Direction.N);
 
         rover.receive("l");
 
-        assertEquals(new Rover(0, 0, "W"), rover);
+        assertEquals(new Rover(0, 0, Direction.W), rover);
     }
 
     @Test
     public void facingNorthRotateRight() {
-        Rover rover = new Rover(0, 0, "N");
+        Rover rover = new Rover(0, 0, Direction.N);
 
         rover.receive("r");
 
-        assertEquals(new Rover(0, 0, "E"), rover);
+        assertEquals(new Rover(0, 0, Direction.E), rover);
     }
 
     @Test
     public void facingSouthRotateLeft() {
-        Rover rover = new Rover(0, 0, "S");
+        Rover rover = new Rover(0, 0, Direction.S);
 
         rover.receive("l");
 
-        assertEquals(new Rover(0, 0, "E"), rover);
+        assertEquals(new Rover(0, 0, Direction.E), rover);
     }
 
     @Test
     public void facingSouthRotateRight() {
-        Rover rover = new Rover(0, 0, "S");
+        Rover rover = new Rover(0, 0, Direction.S);
 
         rover.receive("r");
 
-        assertEquals(new Rover(0, 0, "W"), rover);
+        assertEquals(new Rover(0, 0, Direction.W), rover);
     }
 
     @Test
     public void facingWestRotateLeft() {
-        Rover rover = new Rover(0, 0, "W");
+        Rover rover = new Rover(0, 0, Direction.W);
 
         rover.receive("l");
 
-        assertEquals(new Rover(0, 0, "S"), rover);
+        assertEquals(new Rover(0, 0, Direction.S), rover);
     }
 
     @Test
     public void facingWestRotateRight() {
-        Rover rover = new Rover(0, 0, "W");
+        Rover rover = new Rover(0, 0, Direction.W);
 
         rover.receive("r");
 
-        assertEquals(new Rover(0, 0, "N"), rover);
+        assertEquals(new Rover(0, 0, Direction.N), rover);
     }
 
     @Test
     public void facingEastRotateLeft() {
-        Rover rover = new Rover(0, 0, "E");
+        Rover rover = new Rover(0, 0, Direction.E);
 
         rover.receive("l");
 
-        assertEquals(new Rover(0, 0, "N"), rover);
+        assertEquals(new Rover(0, 0, Direction.N), rover);
     }
 
     @Test
     public void facingEastRotateRight() {
-        Rover rover = new Rover(0, 0, "E");
+        Rover rover = new Rover(0, 0, Direction.E);
 
         rover.receive("r");
 
-        assertEquals(new Rover(0, 0, "S"), rover);
+        assertEquals(new Rover(0, 0, Direction.S), rover);
     }
 }
